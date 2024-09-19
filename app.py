@@ -16,9 +16,18 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 to use SQL
-db = SQL("sqlite:///database_name.db")
+db = SQL("sqlite:///budget_admin.db")
+
+
+# Initialize the database 
+def create_tables():
+    #create user table
+    db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, hashed_password TEXT NOT NULL)")
 
 # Define Each Route
+with app.app_context():
+    create_tables()
+
 @app.route("/")
 @login_required
 def index():
@@ -26,7 +35,7 @@ def index():
     
     return render_template("error.html", message="TODO")
 
-@app.route("/History")
+@app.route("/history")
 @login_required
 def history():
     """Display a table with all of the budgets created"""
@@ -37,13 +46,13 @@ def history():
 def login():
     """Prompt the user to check username and password"""
 
-    return render_template("error.html", message="TODO")
+    return render_template("layout.html", message="TODO")
 
 @app.route("/register")
 def register():
     """Prompt user to define username and password"""
 
-    return render_template("error.html", message="TODO")
+    return render_template("register.html", message="TODO")
 
 @app.route("/log_out")
 @login_required
@@ -51,3 +60,7 @@ def log_out():
     """ Get the user out of the session """
 
     return render_template("error.html", message="TODO")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

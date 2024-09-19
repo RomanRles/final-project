@@ -1,7 +1,42 @@
-.navbar navbar-expand-lg navbar-light{
-
+#custom-navbar{
+    background-color: rgb(171, 215, 255);
 }
 
 .nav-item{
-    
+    color:aqua;
+
+}
+
+h1 {
+    color: black;
+}
+
+.color_b {
+    font-size: larger;
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    color:rgb(14, 57, 94);
+
+}
+
+.container-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.container-numbers {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+
+}
+.color_1 {
+    font-size: 8px;
+    letter-spacing: -9px;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 700;
+    font-style: normal;
+    color: rgb(38, 73, 146);
+      
 }
