@@ -48,11 +48,41 @@ def login():
 
     return render_template("layout.html", message="TODO")
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Prompt user to define username and password"""
+    if request.method == "GET":
+        return render_template("register.html")
+    
+    if request.method == "POST":
+        # Getting user input
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
 
-    return render_template("register.html", message="TODO")
+        # Check user Input
+        if not username:
+            return render_template("error.html", message="Input A Username")
+        elif not password:
+            return render_template("error.html", message="Input a Password")
+        elif not confirmation:
+            return render_template("error.html", message="Confirm Password")
+        elif not confirmation == password:
+            return render_template("error.html", message="Passwords do not match")
+        
+        # Check if the user already exist
+        existing_user = db.execute("SELECT * FROM users WHERE username == ?", username)
+        if existing_user:
+            return render_template("error.html", message="User already Exist")
+        else:
+            # Hash, Store, Login User
+            hashed_password = generate_password_hash(password)
+            db.execute("INSERT INTO users (username, hashed_password) VALUES (?, ?)", username, hashed_password)
+            flash("User Successfully Registered")
+            return redirect("/")
+
+
+
 
 @app.route("/log_out")
 @login_required
