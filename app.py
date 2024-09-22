@@ -42,11 +42,36 @@ def history():
 
     return render_template("error.html", message="TODO")
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """Prompt the user to check username and password"""
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-    return render_template("layout.html", message="TODO")
+        if not username:
+            return render_template("error.html", message="Not username Provided")
+        elif not password:
+            return render_template("error.html", message="Provide a Password")
+        
+        # Check if user exists
+
+        user = db.execute("SELECT id, hashed_password FROM users WHERE username = ?", username)
+        if not check_user:
+            return render_template("error.html", message="Not Registered User")
+        # Compare input password with hashed one
+        if not check_password_hash(user[0]["hashed_password"], password):
+            return render_template("error.html", message="Incorrect Password")
+        
+        # Log user in
+        session["user_id"] = user[0]["id"]
+
+        #Redirect to main route
+        return redirect("/")
+        
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
