@@ -32,6 +32,10 @@ with app.app_context():
 @login_required
 def index():
     """Display cheat Sheet"""
+    if request.method == "GET":
+        return render_template("index.html")
+    
+
     
     return render_template("error.html", message="TODO")
 
@@ -60,7 +64,7 @@ def login():
         # Check if user exists
 
         user = db.execute("SELECT id, hashed_password FROM users WHERE username = ?", username)
-        if not check_user:
+        if not user:
             return render_template("error.html", message="Not Registered User")
         # Compare input password with hashed one
         if not check_password_hash(user[0]["hashed_password"], password):

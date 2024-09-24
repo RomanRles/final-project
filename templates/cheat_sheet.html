@@ -1,0 +1,72 @@
+<div class="cheat-sheet">
+    <h2>
+        Create Your Budget!
+    </h2>
+
+    <form action="/" method="POST">
+        <select class="form-select" id="budgetType" name="type" required>
+            <option selected>SELECT A BUDGET TYPE</option>
+            <option value="labor">Labor Budget</option>
+            <option value="material">Materials Budget</option>
+        </select>
+        
+        <div class="mb-3">
+            <label for="budgetTitle" class="form-label">Budget Title</label>
+            <input type="text" class="form-control" id="budgetTitle" name="title" required>
+        </div>
+
+        <table class="table table-sm">
+            <thead>
+                <tr class="table-dark">
+                    <th scope="col">
+                        Item
+                    </th>
+                    <th scope="col">
+                        Cost
+                    </th>
+                    <th scope="col">
+                        Quantity
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+                <tr class="table-dark">
+                    <td>
+                        <input type="text" name="item_name[]" class="form-control" required>
+                    </td>
+                    <td>
+                        <input type="number" name="item_cost[]" class="form-control" required>
+                    </td>
+                    <td>
+                        <input type="number" name="item_quantity[]" class="form-control" required>
+                    </td>
+                </tr>
+                <!--Add more rows dynamically-->
+                <input type="button" id="newRow" class="btn-outline-dark" value="Add More">
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-outline-dark">Create Budget</button>
+    </form>
+    <script>
+        document.getElementById('newRow').addEventListener('click', function() {
+            var tableBody = document.getElementById('itemTableBody');
+            var newRow = document.createElement('tr');
+            newRow.classList.add('table-dark');
+
+            newRow.innerHTML = `
+            <td>
+                <input type="text" name="item_name[]" class="form-control" required>
+            </td>
+            <td>
+                <input type="number" name="item_cost[] class="form-control" required>
+            <td>
+            <td>
+                <input type="number" name="item_quantity[]" class="form-control" required>
+            </td>
+        `;
+
+        tableBody.appendChild(newRow);
+        });
+    </script>
+</div>
