@@ -28,23 +28,87 @@ def create_tables():
 with app.app_context():
     create_tables()
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     """Display cheat Sheet"""
     if request.method == "GET":
         return render_template("index.html")
     
+    if request.method == "POST":
+        # Get the form Data
+        budget_type = request.form.get('type')
+        budget_title = request.form.get('title')
 
-    
-    return render_template("error.html", message="TODO")
+        item_names = request.form.getlist('item_name[]')
+        item_cost = request.form.getlist('item_cost[]')
+        item_quantity = request.form.getlist('item_quantity[]')
+        profit_percentage = request.form.get('profits')
 
-@app.route("/history")
+        # check user input 
+        if not budget_type:
+            return render_template("error.html", message="Not Budget Type Provided")
+        elif not budget_title:
+            return render_template("error.html", message="Not Budget title Provided")
+        elif not item_names or len(item_names) == 0:
+            return render_template("error.html", message="Not Items Provided")
+        elif not item_cost or len(item_cost) == 0:
+            return render_template("error.html", message="Provide Item Costs")
+        elif not item_quantity or len(item_quantity) == 0:
+            return render_template("error.html", message="Provide the Total Items")
+        try:
+            profit_percentage = float(profit_percentage)
+        except ValueError:
+            return render_template("error.html", message="Invalid Profit Percentage")
+        # Process Information
+        total_budget = 0
+        try:
+            for cost, quantity in zip(item_cost, item_quantity):
+                total_budget += float(cost) * float(quantity)
+        except ValueError:
+            return render_template("error.html", message="invalid cost or quantity")
+
+        total_budget *= (1 + (profit_percentage / 100))
+
+        # Store budgets 
+        user_id = session.get("user_id")
+
+        if not user_id:
+            return redirect("/login")
+        
+        # Store budget
+        budget_id = db.execute("INSERT INTO budgets (user_id, budget_type, budget_title, profit_percentage, total_budget) VALUES (?, ?, ?, ?, ?)",
+                    user_id, budget_type, budget_title, profit_percentage, total_budget)
+        
+        # Store items
+        for names, cost, quantity in zip(item_names, item_cost, item_quantity):
+            db.execute(
+                "INSERT INTO budget_items (budget_id, item_name, item_cost, item_quantity) VALUES (?, ?, ?, ?)",
+                budget_id, names, float(cost), float(quantity)
+            )
+
+        # DISPLAY SUCCESS
+        flash("New Budget Successfully Created!")
+        return redirect("/")
+
+@app.route("/history", methods=["GET"])
 @login_required
 def history():
     """Display a table with all of the budgets created"""
 
-    return render_template("error.html", message="TODO")
+    if request.method == "GET":
+        user_id = session.get("user_id")
+
+        # Retrieve the data from database
+        budgets = db.execute("SELECT id, budget_type, budget_title, total_budget, timestamp FROM budgets WHERE user_id = ? ORDER BY timestamp DESC",
+                             user_id)
+
+        return render_template("history.html", budgets=budgets)
+
+@app.route("/budget/<int:budget_id>")
+@login_required
+def view_budget(budget_id):
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

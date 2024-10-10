@@ -40,3 +40,19 @@ h1 {
     color: rgb(38, 73, 146);
       
 }
+
+.titles {
+    font-size: 30px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: rgb(13, 31, 68);
+}
+
+.titles-small {
+    font-size: large;
+    font-weight: 500;
+    font-family: "Oswald", sans-serif;
+    color: rgb(13, 31, 68);
+
+}

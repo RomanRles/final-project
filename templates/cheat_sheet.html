@@ -1,54 +1,72 @@
 <div class="cheat-sheet">
-    <h2>
+    <h2 class="titles my-4">
         Create Your Budget!
     </h2>
 
     <form action="/" method="POST">
-        <select class="form-select" id="budgetType" name="type" required>
-            <option selected>SELECT A BUDGET TYPE</option>
+        <select class="form-select my-3 bg-light" id="budgetType" name="type" required>
+            <option disabled selected style="color: gray">SELECT A BUDGET TYPE</option>
             <option value="labor">Labor Budget</option>
             <option value="material">Materials Budget</option>
         </select>
         
         <div class="mb-3">
-            <label for="budgetTitle" class="form-label">Budget Title</label>
+            <label for="budgetTitle" class="titles-small my-3">Budget Title</label>
             <input type="text" class="form-control" id="budgetTitle" name="title" required>
         </div>
 
-        <table class="table table-sm">
-            <thead>
-                <tr class="table-dark">
-                    <th scope="col">
-                        Item
-                    </th>
-                    <th scope="col">
-                        Cost
-                    </th>
-                    <th scope="col">
-                        Quantity
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="itemTableBody">
-                <tr class="table-dark">
-                    <td>
-                        <input type="text" name="item_name[]" class="form-control" required>
-                    </td>
-                    <td>
-                        <input type="number" name="item_cost[]" class="form-control" required>
-                    </td>
-                    <td>
-                        <input type="number" name="item_quantity[]" class="form-control" required>
-                    </td>
-                </tr>
-                <!--Add more rows dynamically-->
-                <input type="button" id="newRow" class="btn-outline-dark" value="Add More">
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-borderless table-sm" style="border-radius: 7px; overflow: hidden;">
+                <thead>
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">
+                            Item
+                        </th>
+                        <th scope="col">
+                            Cost
+                        </th>
+                        <th scope="col">
+                            Quantity
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+                    <tr class="table-dark">
+                        <td>
+                            <input type="text" name="item_name[]" class="form-control btn-outline-primary" required>
+                        </td>
+                        <td>
+                            <input type="number" name="item_cost[]" class="form-control" required>
+                        </td>
+                        <td>
+                            <input type="number" name="item_quantity[]" class="form-control" required>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
+            
+            <!--Add more rows dynamically-->
+            <input type="button" id="newRow" class="btn btn-outline-dark mb-5" value="Add More">
+        </div>
+        <!-- Full-width profit input -->
+        <div class="my-3 bg-dark text-white p-3" style="border-radius: 7px;">
+            <label for="profits" class="form-label titles-small text-white">Profit (%)</label>
+            <input type="number" name="profits" id="profits" class="form-control" style="width: 100%;" required>
+        </div>
+
+        <!--Display total amount-->
+        <div class="my-3 bg-dark text-white p-3" style="border-radius: 7px;">
+            <label for="total_price">TOTAL BUDGET:</label>
+            <input type="text" id="total_price" class="form-control" readonly>
+        </div>
         <button type="submit" class="btn btn-outline-dark">Create Budget</button>
+ 
     </form>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
         document.getElementById('newRow').addEventListener('click', function() {
             var tableBody = document.getElementById('itemTableBody');
             var newRow = document.createElement('tr');
@@ -59,14 +77,47 @@
                 <input type="text" name="item_name[]" class="form-control" required>
             </td>
             <td>
-                <input type="number" name="item_cost[] class="form-control" required>
-            <td>
+                <input type="number" name="item_cost[]" class="form-control" required>
+            </td>
             <td>
                 <input type="number" name="item_quantity[]" class="form-control" required>
             </td>
         `;
 
         tableBody.appendChild(newRow);
+        addRowEventListeners();
         });
+
+        // Event Listeners
+        document.getElementById('profits').addEventListener('input', calculateTotal);
+        
+        function addRowEventListeners() {
+            document.querySelectorAll('input[name="item_cost[]"], input[name="item_quantity[]"]').forEach(function(input){
+                input.addEventListener('input', calculateTotal);
+            });
+        }
+
+            function calculateTotal() {
+                let total_price = 0;
+                const profit = parseFloat(document.getElementsByName('profits')[0].value) || 0;
+            
+
+                // Loop on items
+                document.querySelectorAll('#itemTableBody tr').forEach(function(row) {
+                    const item_cost = parseFloat(row.querySelector('input[name="item_cost[]"]').value) || 0;
+                    const item_quantity = parseFloat(row.querySelector('input[name="item_quantity[]"]'). value) || 0;
+
+                    total_price += item_cost * item_quantity;
+                });
+
+                // Apply profit Percentage
+                total_price *= (1 + (profit / 100));
+
+                // Display the Total Price
+                document.getElementById('total_price').value = total_price.toFixed(2);
+        }
+        addRowEventListeners();
+        
+    });
     </script>
 </div>

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Budgets
+{% endblock %}
+
+{% block main %}
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Total</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for budget in budgets %}
+        <tr>
+            <td><a href="url_budgets">{{ budget['budget_title'] }}</td>
+            <td>{{ budget['budget_type'] }}</td>
+            <td>{{ budget['total_budget'] }}</td>
+            <td>{{ budget['timestamp'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
