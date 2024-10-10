@@ -108,7 +108,14 @@ def history():
 @app.route("/budget/<int:budget_id>")
 @login_required
 def view_budget(budget_id):
+    """Display the budget_id INFO"""
+    budget = db.execute("SELECT budget_type, budget_title, profit_percentage, total_budget FROM budgets WHERE id = ? AND user_id = ?",
+                        budget_id, session.get("user_id"))
     
+    items = db.execute("SELECT item_name, item_cost, item_quantity FROM budget_items WHERE budget_id = ?",
+                       budget_id)
+
+    return render_template("view_budget.html", budget=budget, items=items)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

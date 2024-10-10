@@ -17,7 +17,7 @@
     <tbody>
         {% for budget in budgets %}
         <tr>
-            <td><a href="url_budgets">{{ budget['budget_title'] }}</td>
+            <td><a href="{{url_for('view_budget', budget_id=budget['id']) }}">{{ budget['budget_title'] }}</td>
             <td>{{ budget['budget_type'] }}</td>
             <td>{{ budget['total_budget'] }}</td>
             <td>{{ budget['timestamp'] }}</td>

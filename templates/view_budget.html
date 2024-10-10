@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ budget['budget_title'] }}
+{% endblock %}
+
+{% block main %}
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <td>{{ budget['budget_title']}}</td>
+        </tr>
+    </thead>
+    
+</table>
+{% endblock %}
