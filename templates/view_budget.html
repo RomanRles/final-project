@@ -1,16 +1,41 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    {{ budget['budget_title'] }}
+    {{ budget[0]['budget_title'] }}
 {% endblock %}
 
 {% block main %}
+<h2 class="titles">{{ budget[0]['budget_title'] }}</h2>
+<p class="text-left text-muted">Created At: {{ budget[0]['timestamp'] }}</p>
 <table class="table table-responsive">
     <thead>
-        <tr>
-            <td>{{ budget['budget_title']}}</td>
-        </tr>
+            <td><strong>Budget type</strong></td>
+            <td><strong>Item</strong></td>
+            <td><strong>Item quantity</strong></td>
+            <td><strong>Item cost</strong></td>
     </thead>
+    <tbody>
+        {% for item in items %}
+        <tr class="text-capitalize">
+            {% if loop.first %}
+            <td rowspan="{{ items|length }}"><strong>{{ budget[0]['budget_type'] }}</strong></td>
+            {% endif %}
+
+            <td><strong>{{ item['item_name'] }}</strong></td> 
+            <td><strong>{{ item['item_quantity'] }}</strong></td>
+            <td><strong>$ {{ item['item_cost'] }}</strong></td> 
+        </tr>
+        {% endfor %}
+        
+        <tr>
+            <td colspan="1" ><strong>Profits Percentage</strong></td>
+            <td colspan="3"><strong>% {{ budget[0]['profit_percentage']}}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="1"><strong>Total Cost</strong></td>
+            <td colspan="3"><strong>$ {{budget[0]['total_budget']}}</strong></td>
+        </tr>
+    </tbody>
     
 </table>
 {% endblock %}

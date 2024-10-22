@@ -109,7 +109,7 @@ def history():
 @login_required
 def view_budget(budget_id):
     """Display the budget_id INFO"""
-    budget = db.execute("SELECT budget_type, budget_title, profit_percentage, total_budget FROM budgets WHERE id = ? AND user_id = ?",
+    budget = db.execute("SELECT budget_type, budget_title, timestamp, profit_percentage, total_budget FROM budgets WHERE id = ? AND user_id = ?",
                         budget_id, session.get("user_id"))
     
     items = db.execute("SELECT item_name, item_cost, item_quantity FROM budget_items WHERE budget_id = ?",
@@ -184,10 +184,10 @@ def register():
 
 
 
-@app.route("/log_out")
+@app.route("/user_profile")
 @login_required
-def log_out():
-    """ Get the user out of the session """
+def user_profile():
+    """ Manage User profile options """
 
     return render_template("error.html", message="TODO")
 
