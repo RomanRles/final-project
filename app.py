@@ -2,6 +2,8 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+import os
+from werkzeug.utils import secure_filename
 
 # Import Helpers file
 from helpers import login_required
@@ -23,6 +25,16 @@ db = SQL("sqlite:///budget_admin.db")
 def create_tables():
     #create user table
     db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, hashed_password TEXT NOT NULL)")
+
+# Config for the image implementation
+UPLOAD_FOLDER = 'static/uploads/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Define Each Route
 with app.app_context():
@@ -184,13 +196,45 @@ def register():
 
 
 
-@app.route("/user_profile")
+@app.route("/user_profile", methods=["GET"])
 @login_required
 def user_profile():
     """ Manage User profile options """
+    if request.method == "GET":
+        user_id = session["user_id"]
+        user_data = db.execute("SELECT username, profile_image FROM users WHERE id = ?", user_id)
+        return render_template("user_profile.html", user=user_data[0])
 
-    return render_template("error.html", message="TODO")
 
+@app.route('/upload_image', methods=['GET', 'POST'])
+@login_required
+def upload_image():
+    if request.method == 'POST':
+        if 'image' not in request.files:
+            return render_template("error.html", message="No file part")
+        
+        file = request.files['image']
+
+        if file.filename == '':
+            return render_template("error.html", message="No selected file")
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+
+            file.save(file_path)
+
+            user_id = session.get('user_id')
+            db.execute("UPDATE users SET profile_image = ? WHERE id = ?", file_path, user_id)
+
+            flash("profile image uploaded successfully!")
+
+            return redirect(url_for('user_profile'))
+        
+    return render_template('user_profile.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
