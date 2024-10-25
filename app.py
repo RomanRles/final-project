@@ -196,14 +196,17 @@ def register():
 
 
 
-@app.route("/user_profile", methods=["GET"])
+@app.route("/user_profile", methods=['GET'])
 @login_required
 def user_profile():
     """ Manage User profile options """
     if request.method == "GET":
         user_id = session["user_id"]
         user_data = db.execute("SELECT username, profile_image FROM users WHERE id = ?", user_id)
-        return render_template("user_profile.html", user=user_data[0])
+        if user_data:
+            return render_template("user_profile.html", user=user_data[0])
+        else:
+            return render_template("error.html", message="User not found")
 
 
 @app.route('/upload_image', methods=['GET', 'POST'])
@@ -232,9 +235,18 @@ def upload_image():
 
             flash("profile image uploaded successfully!")
 
-            return redirect(url_for('user_profile'))
+            return redirect('/user_profile')
+    else:
+        return render_template('image_picker.html')
+    
+
+    @app.route('/change_password', methods=['GET', 'POST'])
+    @login_required
+    def change_password():
+        if request.method == 'GET':
+            user_id = session.get('user_id')
+            return render_template('change_password.html')
         
-    return render_template('user_profile.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

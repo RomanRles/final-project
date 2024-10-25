@@ -8,8 +8,8 @@
 <div class="container">
     <div style="border-radius: 50%;">
         <!-- If User has image, post it here-->
-         {% if user["profile_image"] %}
-         <img src="{{ url_for('static', filename='uploads/' + user['profile_image']) }}" alt="Profile Image" class="img-fluid" style="width: 150px; height: 150px;">
+         {% if user['profile_image'] %}
+         <img src="{{ url_for('static', filename=user['profile_image'].replace('static/', '')) }}" alt="Profile Image" class="img-fluid" style="width: 150px; height: 150px; border-radius: 50%;">
          {% else %}
          <img src="{{ url_for('static', filename='default_profile.png') }}" alt="Default Profile" class="img-fluid" style="width: 150px; height: 150px;">
          {% endif %}
@@ -17,15 +17,15 @@
     <div class="center">
         <!-- Username -->
         <div class="center">
-            <h2>
+            <h2 class="text-capitalize titles mt-5 mb-4">
                 {{ user['username'] }}
             </h2>
         </div>
     </div>
 </div>
-<div class="container">
-    <a href="/set_image">Add Profile Avatar</a>
-    <a href="/change_password">Change My Password</a>
-    <a href="/logout">Log out</a>
+<div class="container flex-column d-flex justify-content-between mb-3 mt-3">
+    <a href="/upload_image" class="text-decoration-none mb-3 titles-small" style="font-weight: 400;">Add Profile Avatar</a>
+    <a href="/change_password" class="text-decoration-none mb-3 titles-small" style="font-weight: 400;">Change My Password</a>
+    <a href="/logout" class="text-decoration-none titles-small" style="font-weight: 400;">Log out</a>
 </div>
 {% endblock %}
