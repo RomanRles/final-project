@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, g
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 import os
@@ -34,6 +34,17 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.context_processor
+def inject_user():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user_data = db.execute("SELECT profile_image, username FROM users WHERE id = ?", user_id)
+        if user_data:
+            user_info = user_data[0]
+            return {"user": {"profile_image": user_info["profile_image"], "username": user_info["username"]}}
+    return {"user": None}
 
 
 # Define Each Route
@@ -240,13 +251,42 @@ def upload_image():
         return render_template('image_picker.html')
     
 
-    @app.route('/change_password', methods=['GET', 'POST'])
-    @login_required
-    def change_password():
-        if request.method == 'GET':
-            user_id = session.get('user_id')
-            return render_template('change_password.html')
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'GET':
+        return render_template('change_password.html')
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        # Old password
+        actual_password = request.form.get('actual_password')
+        if not actual_password:
+            return render_template('error.html', message="Provide the last Password")
+        # New password
+        new_password = request.form.get('new_password')
+        if not new_password:
+            return render_template('error.html', message="Provide the new Password")
+
+        # Retrieve the Stored password
+        real_password = db.execute('SELECT hashed_password FROM users WHERE id = ?', user_id)[0]['hashed_password']
+
+        if check_password_hash(real_password, actual_password):
+            # hash new password
+            hashed_new_password = generate_password_hash(new_password)
+            db.execute('UPDATE users SET hashed_password = ? WHERE id = ?', hashed_new_password, user_id)
+
+            flash('Password Successfully Updated')
+            return redirect("/user_profile")
+    else:
+        return render_template('error.html', message="Current Password is Incorrect")
+
         
+@app.route("/logout")
+@login_required
+def logout():
+        session.clear()
+        flash("Logged Out Successfully")
+        return redirect('/login')
 
 if __name__ == "__main__":
     app.run(debug=True)

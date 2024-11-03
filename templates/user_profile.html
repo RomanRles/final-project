@@ -9,9 +9,9 @@
     <div style="border-radius: 50%;">
         <!-- If User has image, post it here-->
          {% if user['profile_image'] %}
-         <img src="{{ url_for('static', filename=user['profile_image'].replace('static/', '')) }}" alt="Profile Image" class="img-fluid" style="width: 150px; height: 150px; border-radius: 50%;">
+         <img src="{{ url_for('static', filename=user['profile_image'].replace('static/', '')) }}" alt="Profile Image" class="img-fluid" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid gray; box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.3);">
          {% else %}
-         <img src="{{ url_for('static', filename='default_profile.png') }}" alt="Default Profile" class="img-fluid" style="width: 150px; height: 150px;">
+         <img src="{{ url_for('static', filename='uploads/default-img.png') }}" alt="Default Profile" class="img-fluid profile-img" style="width: 150px; height: 150px;">
          {% endif %}
     </div>
     <div class="center">
@@ -23,9 +23,22 @@
         </div>
     </div>
 </div>
-<div class="container flex-column d-flex justify-content-between mb-3 mt-3">
-    <a href="/upload_image" class="text-decoration-none mb-3 titles-small" style="font-weight: 400;">Add Profile Avatar</a>
-    <a href="/change_password" class="text-decoration-none mb-3 titles-small" style="font-weight: 400;">Change My Password</a>
-    <a href="/logout" class="text-decoration-none titles-small" style="font-weight: 400;">Log out</a>
+<div class="container flex-column d-flex align-items-center justify-content-between mb-3 mt-3">
+    <a href="/upload_image" class="d-flex flex-row align-items-center gap-3 mb-3 titles-small text-decoration-none" style="font-weight: 400;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+        </svg>
+        Add Profile Avatar</a>
+    <a href="/change_password" class="d-flex flex-row align-items-center gap-3 text-decoration-none mb-3 titles-small" style="font-weight: 400;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+          </svg>
+        Change My Password</a>
+    <a href="/logout" class="d-flex flex-row align-items-center gap-3 text-decoration-none titles-small" style="font-weight: 400;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-person-fill-x" viewBox="0 0 16 16">
+            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708"/>
+        </svg>
+        Log out</a>
 </div>
 {% endblock %}

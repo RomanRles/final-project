@@ -15,8 +15,8 @@
             <input type="text" class="form-control" id="budgetTitle" name="title" required>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-borderless table-sm" style="border-radius: 7px; overflow: hidden;">
+        <div class="table-responsive p-3">
+            <table class="table table-borderless table-sm shadows" style="border-radius: 7px; overflow: hidden;">
                 <thead>
                 <thead>
                     <tr class="table-dark">
@@ -48,20 +48,20 @@
 
             
             <!--Add more rows dynamically-->
-            <input type="button" id="newRow" class="btn btn-outline-dark mb-5" value="Add More">
+            <input type="button" id="newRow" class="btn btn-outline-dark mb-5 buttons" value="Add More">
         </div>
         <!-- Full-width profit input -->
-        <div class="my-3 bg-dark text-white p-3" style="border-radius: 7px;">
+        <div class="my-3 bg-dark text-white p-3 shadows" style="border-radius: 7px;">
             <label for="profits" class="form-label titles-small text-white">Profit (%)</label>
             <input type="number" name="profits" id="profits" class="form-control" style="width: 100%;" required>
         </div>
 
         <!--Display total amount-->
-        <div class="my-3 bg-dark text-white p-3" style="border-radius: 7px;">
+        <div class="my-3 bg-dark text-white p-3 shadows" style="border-radius: 7px;">
             <label for="total_price">TOTAL BUDGET:</label>
             <input type="text" id="total_price" class="form-control" readonly>
         </div>
-        <button type="submit" class="btn btn-outline-dark">Create Budget</button>
+        <button type="submit" class="btn btn-outline-dark buttons">Create Budget</button>
  
     </form>
     <script>
