@@ -47,7 +47,7 @@
                     <!-- Navbar Icon Image -->
                      <!--If user logged in -->
                      {% if user %}
-                        <div class="profile-container">
+                        <div class="profile-container d-lg-none">
                                 <a href="{{ url_for('user_profile') }}" class="text-decoration-none">
                                     <!-- If user has profile image -->
                                      {% if user['profile_image'] %}
@@ -93,7 +93,22 @@
                                 </a>
                                 </li>
                             </div>
+
+                            <!-- Full-width Profile Icon (only in expanded view) -->
+                            
+                            {% if user %}
+                                <li class="nav-item d-none d-lg-block">
+                                    <a href="{{ url_for('user_profile') }}" class="nav-link d-flex align-items-center">
+                                        {% if user['profile_image'] %}
+                                            <img src="{{ url_for('static', filename=user['profile_image'].replace('static/', '')) }}" class="profile-img" style="height: 40px; width: 40px; border-radius: 50%; border: 1px solid gray;">
+                                        {% else %}
+                                            <div class="profile-initials">{{ user['username'][0] | upper }}</div>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
+                        
                     {% else %}
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item">

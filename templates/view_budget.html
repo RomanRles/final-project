@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td colspan="1"><strong>Total Cost</strong></td>
-            <td colspan="3"><strong>$ {{budget[0]['total_budget']}}</strong></td>
+            <td colspan="3"><strong>$ {{ "%.2f" | format(budget[0]['total_budget']) }}</strong></td>
         </tr>
     </tbody>
     

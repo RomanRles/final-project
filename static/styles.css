@@ -97,3 +97,6 @@ h1 {
     border: 1px solid gray;
     box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.3);
 }
+roman {
+    background-color: #08273b;
+}

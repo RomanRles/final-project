@@ -19,7 +19,7 @@
         <tr>
             <td><a class="text-decoration-none" href="{{url_for('view_budget', budget_id=budget['id']) }}">{{ budget['budget_title'] }}</td>
             <td class="text-capitalize">{{ budget['budget_type'] }}</td>
-            <td>{{ budget['total_budget'] }}</td>
+            <td>$ {{ "%.2f" | format(budget['total_budget']) }}</td>
             <td>{{ budget['timestamp'] }}</td>
         </tr>
         {% endfor %}

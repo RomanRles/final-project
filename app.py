@@ -194,7 +194,7 @@ def register():
             return render_template("error.html", message="Passwords do not match")
         
         # Check if the user already exist
-        existing_user = db.execute("SELECT * FROM users WHERE username == ?", username)
+        existing_user = db.execute("SELECT * FROM users WHERE username = ?", username)
         if existing_user:
             return render_template("error.html", message="User already Exist")
         else:
@@ -203,7 +203,7 @@ def register():
             db.execute("INSERT INTO users (username, hashed_password) VALUES (?, ?)", username, hashed_password)
             flash("User Successfully Registered")
             return redirect("/")
-
+            
 
 
 
